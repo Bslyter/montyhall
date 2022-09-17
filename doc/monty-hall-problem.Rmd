@@ -1,0 +1,305 @@
+---
+output:
+  html_document:
+    theme: readable
+    df_print: paged
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+# set global doc options:
+# do not include warning messages
+# in the knitted document
+knitr::opts_chunk$set( echo=T, message=F, warning=F, image.width=10)
+```
+**Introducing montyhall**
+
+**Abstract**
+
+The Monty Hall game (probability problem) follows a game show format where 
+the player is given the option to select ONE of THREE doors. Similar to other 
+hidden doors (hidden prizes) games, the player does not know what is behind 
+each door. Two doors have goats behind them. One door has a new car behind it. 
+The player gets the option of choosing a door, but the prize is not yet revealed. 
+The host then opens one of the two doors—always revealing a goat. Lastly, 
+the player has one final choice, stay with their first choice or choose 
+the last remaining door.
+
+create_game() generates a new game that consists of two doors with goats 
+behind them, and one with a car.
+
+**Description**
+
+The game setup replicates the game on the TV show "Let's
+Make a Deal" where there are three doors for a contestant
+to choose from, one of which has a car behind it and two 
+have goats. The contestant selects a door, then the host
+opens a door to reveal a goat, and then the contestant is
+given an opportunity to stay with their original selection
+or switch to the other unopened door. There was a famous 
+debate about whether it was optimal to stay or switch when
+given the option to switch, so this simulation was created
+to test both strategies. 
+
+The function returns a length 3 character vector
+indicating the positions of goats and the car.
+
+```{r}
+
+```
+
+**Create_game**
+```{r}
+
+# step 1: create a vector of 3 doors: 2 goats and 1 car
+# step 2: randomize the position of the car for a new game
+# step 3: return the new game vector 
+
+create_game <- function( )
+{
+    prizes <- c("goat","goat","car")
+  a.game <- sample( x=prizes, size=3, replace=F )
+    return( a.game )
+}
+
+```
+
+**Next step**
+
+The contestant chooses one door, but no prizes are revealed.
+
+"DoorS" vector created for contestant--1, 2, 3.
+The sample function is then used to randomly pick
+one of three doors. This simulates the contestant's
+choice.
+
+
+The function returns the number of the 
+randomly selected door.
+
+**Select_door**
+```{r}
+
+#Step 5: create a vector of doors numbered 1,2,3
+#Step 6: randomly select ONE of the doors
+#Step 7: return the selection
+
+#Changes made to my code based on solutions
+#Removed "replace=F"
+#Replaced "C(1,2,3)" woth doors in sample
+
+select_door <- function( )
+{
+
+  doors <- c(1,2,3) 
+  a.pick <- sample( x=doors, size=1 )
+  return( a.pick )
+
+}
+
+```
+
+**Next step**
+
+The host opens one of the doors containing a goat. 
+If the contestant has already selected a goat
+in their first pick, the host will open the other
+goat door. If the contestant has picked the door
+with the car, the host will open one or two
+goat doors revealing a goat.
+
+If the contestant's first pick is a car,
+the host will open one of two doors containing
+a goat. If the contestant's first pick is a goat,
+the host will open the only remaining door with
+a goat.
+
+The contestant will be given the number of a
+door containing a goat. This is the door
+opened by the host.
+
+**Open_goat_door**
+```{r}
+
+#Step 8: The door can't be a door the contestant has already selected.
+
+#Changes made based on Lab 1 solutions... add open_goat_door before other_door function
+#If the host has two doors to choose from, the host will still need to pick ONE.
+#Open_goat_door function should be based on game, a.pick instead of first.game, select.door
+#Add doors <- c(1,2,3) and IF statements
+#Remove other_door and other.door vectors
+
+open_goat_door <- function( game, a.pick )
+
+{
+    doors <- c(1,2,3)
+   # if contestant selected car,
+   # randomly select one of two goats 
+   if( game[ a.pick ] == "car" )
+   { 
+     goat.doors <- doors[ game != "car" ] 
+     opened.door <- sample( goat.doors, size=1 )
+   }
+   if( game[ a.pick ] == "goat" )
+   { 
+     opened.door <- doors[ game != "car" & doors != a.pick ] 
+   }
+   return( opened.door ) # number between 1 and 3
+  
+}
+
+```
+
+**Next step**
+The contestant either stays with their first choice,
+Or they select the door not yet opened by the host.
+
+Knowing that one goat door has been revealed, the
+contestant doesn't yet know which door has a car.
+They can either stay with their first choice or
+choose the one remaining unpicked and unrevealed door.
+
+The contestant will be given the number of a
+door containing a goat. This is the door
+opened by the host.
+
+**Change_door**
+```{r}
+
+#Step 9: Change Doors?
+
+#First option: Contestant decides to stay with first choice.
+#Changes made based on Lab 1 solutions... update change_door functions to include IF statements
+
+change_door <- function( stay=T, opened.door, a.pick )
+{
+  
+doors <- c(1,2,3) 
+   
+   if( stay )
+   {
+     final.pick <- a.pick
+   }
+   if( ! stay )
+   {
+     final.pick <- doors[ doors != opened.door & doors != a.pick ] 
+   }
+  
+   return( final.pick )  # number between 1 and 3
+  
+
+}
+
+```
+
+**Next step**
+
+The prized is revealed based on the 
+contestant's final door selection.
+
+If the contestant's final pick contains
+a goat, they lose the game.
+If the contestant's final pick contains
+a car, they win the game.
+
+**Determine_winner**
+```{r}
+
+#Step 10: Test both options.
+
+#Changes made based on Lab 1 solutions... update determine_winner functions to reflect change_door IF statements
+
+determine_winner <- function( final.pick, game )
+{
+   if( game[ final.pick ] == "car" )
+   {
+      return( "WIN" )
+   }
+   if( game[ final.pick ] == "goat" )
+   {
+      return( "LOSE" )
+   }
+}
+
+```
+
+Play_game contains all of the aforementioned code and functions
+and allows users to create a new game.
+
+**Play_game**
+```{r}
+
+play_game <- function( )
+{
+  new.game <- create_game()
+  first.pick <- select_door()
+  opened.door <- open_goat_door( new.game, first.pick )
+  final.pick.stay <- change_door( stay=T, opened.door, first.pick )
+  final.pick.switch <- change_door( stay=F, opened.door, first.pick )
+ outcome.stay <- determine_winner( final.pick.stay, new.game  )
+  outcome.switch <- determine_winner( final.pick.switch, new.game )
+
+  # game.results <- bundle the results
+  # return( <<< game.results >>> )
+  
+  strategy <- c("stay","switch")
+  outcome <- c(outcome.stay,outcome.switch)
+  game.results <- data.frame( strategy, outcome,
+                              stringsAsFactors=F )
+  return( game.results )
+}
+
+```
+
+```{r}
+
+play_game()
+
+```
+
+Game loop. This for-loop allows users to play
+multiple games and review results.
+
+Users can review the results of multiple
+games using a for-loop. This will allow the user
+to compare wins to loses to help understand 
+probability.
+
+All functions combined to create a new game,
+multiple times.
+
+**For_loop**
+```{r}
+
+play_n_games <- function( n=100 )
+{
+  
+  library( dplyr )
+  results.list <- list()   # collector
+  loop.count <- 1
+
+  for( i in 1:n )  # iterator
+  {
+    game.outcome <- play_game()
+    results.list[[ loop.count ]] <- game.outcome 
+    loop.count <- loop.count + 1
+  }
+  
+  results.df <- dplyr::bind_rows( results.list )
+
+  table( results.df ) %>% 
+  prop.table( margin=1 ) %>%  # row proportions
+  round( 2 ) %>% 
+  print()
+  
+  return( results.df )
+
+}
+
+```
+
+```{r}
+
+play_n_games()
+
+```

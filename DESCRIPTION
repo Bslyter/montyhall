@@ -1,0 +1,18 @@
+Package: montyhall
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Blake", "Slyter", , "blake.slyter@asu.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: The Monty Hall game (probability problem) follows a game show format where the player is given the option to select ONE of THREE doors. Similar to other hidden doors (hidden prizes) games, the player does not know what is behind each door. Two doors have goats behind them. One door has a new car behind it. The player gets the option of choosing a door, but the prize is not yet revealed. The host then opens one of the two doors—always revealing a goat. Lastly, the player has one final choice, stay with their first choice or choose the last remaining door. The prize is then revealed.
+Depends: dplyr
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+        license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+NeedsCompilation: no
+Packaged: 2022-09-17 04:47:11 UTC; bslyter
+Author: Blake Slyter [aut, cre] (YOUR-ORCID-ID)
+Maintainer: Blake Slyter <blake.slyter@asu.edu>
+Built: R 4.1.1; ; 2022-09-17 04:47:24 UTC; windows
